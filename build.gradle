@@ -1,5 +1,5 @@
 def projectDependencies = new Properties()
-projectDependencies.load(new FileInputStream("${rootDir}/../dependencies.list"))
+projectDependencies.load(new FileInputStream("${rootDir}/dependencies.list"))
 project.ext.sdkVersion = 29
 project.ext.minSdkVersion = 16
 project.ext.buildTools = projectDependencies.get("ANDROID_BUILD_TOOLS")
@@ -20,10 +20,10 @@ static String getAppId (path) {
 }
 
 allprojects {
-    def currentVersion = file("${rootDir}/../version.txt").text.trim()
+    def currentVersion = file("${rootDir}/version.txt").text.trim()
 
     def props = new Properties()
-    props.load(new FileInputStream("${rootDir}/../dependencies.list"))
+    props.load(new FileInputStream("${rootDir}/dependencies.list"))
     props.each { key, val ->
         project.ext.set(key, val)
     }
@@ -33,11 +33,19 @@ allprojects {
             kotlin_version = projectDependencies.get('KOTLIN')
         }
         repositories {
-            mavenLocal()
+                
+            maven {
+                url 'https://maven.aliyun.com/repository/public/'
+            }
+            maven {
+                url 'https://maven.aliyun.com/repository/google/'
+            }
+
+            // google()
             mavenCentral()
-            maven { url 'https://jitpack.io' }
-            google()
-            jcenter()
+            // maven { url 'https://jitpack.io' }
+            // google()
+            // jcenter()
         }
         dependencies {
             classpath "com.android.tools.build:gradle:${props.get("GRADLE_BUILD_TOOLS")}"
@@ -50,10 +58,15 @@ allprojects {
     version = currentVersion
 
     repositories {
-        mavenLocal()
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/google/'
+        }
+
+        // google()
         mavenCentral()
-        google()
-        jcenter()
     }
 
     if (!project.name.startsWith("realm-examples")

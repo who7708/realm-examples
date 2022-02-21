@@ -45,7 +45,10 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().build();
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
         Realm.deleteRealm(config);
         Realm.setDefaultConfiguration(config);
         createTestData();
